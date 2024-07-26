@@ -1,38 +1,215 @@
-.App {
-  text-align: center;
+/* src/App.css */
+
+/* 기본 스타일 */
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  transition: background-color 0.3s, color 0.3s;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+/* 다크 모드 스타일 */
+
+body.dark-mode {
+  background-color: #121212;
+  color: #e0e0e0;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
+.header {
+  background-color: #fff;
+}
+
+.header.dark-mode {
+  background-color: #333;
+  color: #e0e0e0;
+}
+
+.nav a {
+  color: #000;
+}
+
+.nav a:hover {
+  color: #007bff;
+}
+
+body.dark-mode .nav a {
+  color: #e0e0e0;
+}
+
+body.dark-mode .nav a:hover {
+  color: #66b2ff;
+}
+
+.dropdown-menu {
+  background-color: #fff;
+}
+
+body.dark-mode .dropdown-menu {
+  background-color: #333;
+  color: #e0e0e0;
+}
+
+  /* Main page styles */
+  .main-container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
   }
+  
+  .content {
+    display: flex;
+    flex: 1;
+  }
+  
+  .camera-selector {
+    width: 200px;
+    border-right: 1px solid #ccc;
+  }
+  
+  .camera-selector ul {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .camera-selector li {
+    padding: 10px;
+    cursor: pointer;
+    border-bottom: 1px solid #ccc;
+  }
+  
+  .camera-selector li:hover {
+    background-color: #f0f0f0;
+  }
+  
+  .camera-feed {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+  }
+  
+  iframe {
+    border: none;
+  }
+  
+  /* Login page styles */
+  .entrance-container {
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: center;
+  }
+
+  .login-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+  }
+  
+  .form-group {
+    margin-bottom: 15px;
+  }
+  
+  .form-group label {
+    display: block;
+    margin-bottom: 5px;
+  }
+  
+  .form-group input {
+    padding: 8px;
+    width: 200px;
+  }
+  
+  /* Signup page styles */
+  .signup-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+  }
+  
+  /* Find ID/PW page styles */
+  .find-id-pw-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+  }
+  
+  /* Camera management page styles */
+  .camera-management-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+  }
+  
+  /* Detection records page styles */
+  .detection-records-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+  }
+  
+  
+  /* Global styles */
+  body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+  }
+  
+
+.icons .icon {
+  margin-left: 15px;
+  cursor: pointer;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.main-container {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  height: 100vh;
+}
+
+.content {
+  display: flex;
+  flex: 1;
+}
+
+.camera-selector {
+  width: 200px;
+  border-right: 1px solid #ccc;
+}
+
+.camera-selector ul {
+  list-style: none;
+  padding: 0;
+}
+
+.camera-selector li {
+  padding: 10px;
+  cursor: pointer;
+  border-bottom: 1px solid #ccc;
+}
+
+.camera-selector li:hover {
+  background-color: #f0f0f0;
+}
+
+.camera-feed {
+  flex: 1;
+  display: flex;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  align-items: center;
+  padding: 20px;
 }
 
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+iframe {
+  border: none;
 }
