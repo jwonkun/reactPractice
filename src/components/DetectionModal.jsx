@@ -29,13 +29,10 @@ const DetectionModal = ({ record, onClose }) => {
       <ModalContent>
         <CloseButton onClick={onClose}>×</CloseButton>
         <h2>영상 세부정보</h2>
-        <iframe
+        <DetectedVideo
           src={`/videos/${record.videoName}.mp4`}
           title="Video"
-          width="100%"
-          height="200" // 영상 높이를 줄였습니다.
-          frameBorder="0"
-        ></iframe>
+        />
         <Detail>
           <p><strong>제목:</strong> {record.videoName}</p>
           <p><strong>일자:</strong> {record.detectionDateTime}</p>
@@ -121,6 +118,11 @@ const CloseButton = styled.button`
   }
 `;
 
+const DetectedVideo = styled.video`
+  width: 100%;
+  height: 200 ;
+  
+`;
 const Detail = styled.div`
   margin: 10px 0; // 위아래 여백을 줄였습니다.
 `;

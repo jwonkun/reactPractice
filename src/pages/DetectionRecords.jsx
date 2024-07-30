@@ -5,129 +5,35 @@ import DetectionModal from '../components/DetectionModal'; // 모달 컴포넌�
 const sampleRecords = [
   {
     id: 1,
-    videoThumbnail: '/path/to/thumbnail1.jpg',
+    videoThumbnail: '/images/thumbnail1.jpg',
     videoName: 'MT20240729-01',
     detectionDateTime: '2024-07-29 14:30',
     detectionType: 'MT',
+    videoDuration: 120, // 2분
   },
   {
     id: 2,
-    videoThumbnail: '/path/to/thumbnail2.jpg',
+    videoThumbnail: '/images/thumbnail2.jpg',
     videoName: 'MT20240729-02',
     detectionDateTime: '2024-07-29 15:00',
     detectionType: 'MT',
+    videoDuration: 150, // 2분 30초
   },
   {
-    id: 2,
-    videoThumbnail: '/path/to/thumbnail2.jpg',
-    videoName: 'MT20240729-02',
-    detectionDateTime: '2024-07-29 15:00',
+    id: 3,
+    videoThumbnail: '/images/thumbnail3.jpg',
+    videoName: 'MT20240730-01',
+    detectionDateTime: '2024-07-30 14:30',
     detectionType: 'MT',
+    videoDuration: 95, // 1분 35초
   },
   {
-    id: 2,
-    videoThumbnail: '/path/to/thumbnail2.jpg',
-    videoName: 'MT20240729-02',
-    detectionDateTime: '2024-07-29 15:00',
+    id: 4,
+    videoThumbnail: '/images/thumbnail4.jpg',
+    videoName: 'MT20240730-02',
+    detectionDateTime: '2024-07-30 15:00',
     detectionType: 'MT',
-  },
-  {
-    id: 2,
-    videoThumbnail: '/path/to/thumbnail2.jpg',
-    videoName: 'MT20240729-02',
-    detectionDateTime: '2024-07-29 15:00',
-    detectionType: 'MT',
-  },
-  {
-    id: 2,
-    videoThumbnail: '/path/to/thumbnail2.jpg',
-    videoName: 'MT20240729-02',
-    detectionDateTime: '2024-07-29 15:00',
-    detectionType: 'MT',
-  },
-  {
-    id: 2,
-    videoThumbnail: '/path/to/thumbnail2.jpg',
-    videoName: 'MT20240729-02',
-    detectionDateTime: '2024-07-29 15:00',
-    detectionType: 'MT',
-  },
-  {
-    id: 2,
-    videoThumbnail: '/path/to/thumbnail2.jpg',
-    videoName: 'MT20240729-02',
-    detectionDateTime: '2024-07-29 15:00',
-    detectionType: 'MT',
-  },
-  {
-    id: 2,
-    videoThumbnail: '/path/to/thumbnail2.jpg',
-    videoName: 'MT20240729-02',
-    detectionDateTime: '2024-07-29 15:00',
-    detectionType: 'MT',
-  },
-  {
-    id: 2,
-    videoThumbnail: '/path/to/thumbnail2.jpg',
-    videoName: 'MT20240729-02',
-    detectionDateTime: '2024-07-29 15:00',
-    detectionType: 'MT',
-  },
-  {
-    id: 2,
-    videoThumbnail: '/path/to/thumbnail2.jpg',
-    videoName: 'MT20240729-02',
-    detectionDateTime: '2024-07-29 15:00',
-    detectionType: 'MT',
-  },
-  {
-    id: 2,
-    videoThumbnail: '/path/to/thumbnail2.jpg',
-    videoName: 'MT20240729-02',
-    detectionDateTime: '2024-07-29 15:00',
-    detectionType: 'MT',
-  },
-  {
-    id: 2,
-    videoThumbnail: '/path/to/thumbnail2.jpg',
-    videoName: 'MT20240729-02',
-    detectionDateTime: '2024-07-29 15:00',
-    detectionType: 'MT',
-  },
-  {
-    id: 2,
-    videoThumbnail: '/path/to/thumbnail2.jpg',
-    videoName: 'MT20240729-02',
-    detectionDateTime: '2024-07-29 15:00',
-    detectionType: 'MT',
-  },
-  {
-    id: 2,
-    videoThumbnail: '/path/to/thumbnail2.jpg',
-    videoName: 'MT20240729-02',
-    detectionDateTime: '2024-07-29 15:00',
-    detectionType: 'MT',
-  },
-  {
-    id: 2,
-    videoThumbnail: '/path/to/thumbnail2.jpg',
-    videoName: 'MT20240729-02',
-    detectionDateTime: '2024-07-29 15:00',
-    detectionType: 'MT',
-  },
-  {
-    id: 2,
-    videoThumbnail: '/path/to/thumbnail2.jpg',
-    videoName: 'MT20240729-02',
-    detectionDateTime: '2024-07-29 15:00',
-    detectionType: 'MT',
-  },
-  {
-    id: 2,
-    videoThumbnail: '/path/to/thumbnail2.jpg',
-    videoName: 'MT20240729-02',
-    detectionDateTime: '2024-07-29 15:00',
-    detectionType: 'MT',
+    videoDuration: 180, // 3분
   },
   // 추가적인 탐지 기록을 여기에 추가
 ];
@@ -143,9 +49,14 @@ function DetectionRecords() {
     setSelectedRecord(null);
   };
 
+  const formatDuration = (seconds) => {
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = seconds % 60;
+    return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
+  };
+
   return (
     <DetectionRecordsContainer>
-      <h2>탐지 기록 페이지</h2>
       <RecordsGrid>
         {sampleRecords.map((record) => (
           <RecordBox key={record.id} onClick={() => handleBoxClick(record)}>
@@ -154,6 +65,7 @@ function DetectionRecords() {
               <VideoName>{record.videoName}</VideoName>
               <DateTime>{record.detectionDateTime}</DateTime>
               <DetectionType>{record.detectionType}</DetectionType>
+              <Duration>{formatDuration(record.videoDuration)}</Duration>
             </Info>
           </RecordBox>
         ))}
@@ -180,6 +92,10 @@ const DetectionRecordsContainer = styled.div`
   padding: 20px;
   margin: 50px auto;
   overflow-y: auto;
+
+  @media (max-width:768px){
+    width: 80%;
+  }
 `;
 
 const RecordsGrid = styled.div`
@@ -205,10 +121,12 @@ const RecordBox = styled.div`
 `;
 
 const Thumbnail = styled.img`
-  width: 100%;
+  width: 150px;
   height: 200px;
   object-fit: cover;
   margin: 10px;
+  border-style: none;
+  border-radius: 8px;
 `;
 
 const Info = styled.div`
@@ -229,4 +147,14 @@ const DateTime = styled.p`
 const DetectionType = styled.p`
   font-size: 14px;
   color: #888;
+`;
+
+const Duration = styled.p`
+  font-size: 14px;
+  color: #000;
+  font-weight: bold;
+
+  .dark-mode & {
+    color: #888;
+  }
 `;

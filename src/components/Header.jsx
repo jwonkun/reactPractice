@@ -43,12 +43,14 @@ function Header() {
         <Link to="/main">
           <Logo src="/images/CattleBell_logo.png" alt="CattleBell Logo" />
         </Link>
-        <StyledLink to="/camera-management" active={location.pathname === '/camera-management'}>
-          카메라 관리
-        </StyledLink>
-        <StyledLink to="/detection-records" active={location.pathname === '/detection-records'}>
-          탐지 기록
-        </StyledLink>
+        <NavLinks>
+          <StyledLink to="/camera-management" active={location.pathname === '/camera-management'}>
+            카메라 관리
+          </StyledLink>
+          <StyledLink to="/detection-records" active={location.pathname === '/detection-records'}>
+            탐지 기록
+          </StyledLink>
+        </NavLinks>
       </Nav>
       <Icons>
         <NotificationIconWrapper onClick={toggleNotification}>
@@ -77,15 +79,15 @@ export default Header;
 const HeaderContainer = styled.header`
   display: flex;
   justify-content: space-between;
-  align-items: center;
   padding: 10px 20px;
   background-color: #fff;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
 
   &.dark-mode {
     background-color: #333;
     color: #e0e0e0;
   }
+
 `;
 
 const Logo = styled.img`
@@ -93,6 +95,16 @@ const Logo = styled.img`
 `;
 
 const Nav = styled.nav`
+  display: flex;
+  align-items: center;
+
+  @media (max-width:768px){
+    flex-direction: column;
+    align-items: start;
+  }
+`;
+
+const NavLinks = styled.div`
   display: flex;
   gap: 20px;
   align-items: end;
@@ -108,11 +120,15 @@ const StyledLink = styled(Link)`
   &:hover {
     color: ${(props) => (props.active ? '#000' : '#000')};
   }
+
+  @media (max-width: 768px) {
+    font-size: ${(props) => (props.active ? '20px' : '16px')};
+    padding: 10px 0;
+  }
 `;
 
 const Icons = styled.div`
   display: flex;
-  align-items: center;
   gap: 15px;
   position: relative;
 

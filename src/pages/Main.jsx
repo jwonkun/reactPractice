@@ -6,9 +6,11 @@ import styled from 'styled-components';
 
 function Main() {
   const cameras = [
-    { name: '카메라 1', url: 'http://camera1.com/stream' },
-    { name: '카메라 2', url: 'http://camera2.com/stream' },
-    { name: '카메라 3', url: '' },
+    { name: '카메라 1', src: '/videos/cow_video.mp4' },
+    { name: '카메라 2', src: 'http://camera2.com/stream' },
+    { name: '카메라 3', src: '' },
+    { name: '카메라 4', src: '' },
+    { name: '카메라 5', src: '' },
   ];
 
   const [selectedCamera, setSelectedCamera] = useState(cameras[0]);
@@ -25,17 +27,17 @@ function Main() {
         </CameraSelectorWrapper>
         <CameraFeed>
           {selectedCamera ? (
-            <CameraIframe
-              src={selectedCamera.url}
+            <CameraVideo
+              src={selectedCamera.src}
               title={selectedCamera.name}
+              controls
+              autoPlay
               onError={(e) => {
                 e.target.src = 'https://via.placeholder.com/800x600?text=Error'; // Fallback URL
                 e.target.onerror = null; // Prevent infinite loop
               }}
             />
           ) : (
-            // <FetchExample />
-            // Uncomment the line below if you want to show a message when no camera is selected
             <p>카메라를 선택하세요.</p>
           )}
         </CameraFeed>
@@ -55,23 +57,32 @@ const MainContainer = styled.div`
 const Content = styled.div`
   display: flex;
   flex: 1;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+  }
 `;
 
 const CameraSelectorWrapper = styled.div`
   width: 200px;
   border-right: 1px solid #ccc;
+
+  @media (max-width: 768px) {
+    width: auto;
+    max-height: 100px;
+    overflow-y: auto;
+  }
 `;
 
 const CameraFeed = styled.div`
   flex: 1;
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: start;
   padding: 20px;
 `;
 
-const CameraIframe = styled.iframe`
+const CameraVideo = styled.video`
   border: none;
   width: 100%;
-  height: 100%;
 `;

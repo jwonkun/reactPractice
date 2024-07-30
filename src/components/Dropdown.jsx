@@ -47,7 +47,7 @@ export default Dropdown;
 
 const DropdownMenu =styled.div`
   position: fixed;
-  top: 50px;
+  top: 75px;
   right: 20px;
   background-color: #fff;
   border: 1px solid #ddd;
@@ -61,5 +61,9 @@ const DropdownMenu =styled.div`
   p {
     font-weight: bold;
     font-size: 20px;
+  }
+
+  @media (max-width:768px){
+    top: 115px
   }
 `;

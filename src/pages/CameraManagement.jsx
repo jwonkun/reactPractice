@@ -5,7 +5,12 @@ function CameraManagement() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [editIndex, setEditIndex] = useState(null);
-  const [cameras, setCameras] = useState([]);
+  const [cameras, setCameras] = useState([
+    { name: 'Cam1', id: '001', location: 'Front Door' },
+    { name: 'Cam2', id: '002', location: 'Back Yard' },
+    { name: 'Cam3', id: '003', location: 'Living Room' },
+    { name: 'Cam4', id: '004', location: 'Garage' }
+  ]);
 
   const openModal = () => {
     setIsModalOpen(true);
@@ -44,7 +49,7 @@ function CameraManagement() {
 
   return (
     <CamManageContainer>
-      <Button onClick={openModal}>카메라 추가</Button>
+      <AddButton className="addBtn" onClick={openModal}>카메라 추가</AddButton>
 
       {isModalOpen && (
         <Modal>
@@ -163,6 +168,11 @@ const Button = styled.button`
   &:hover {
     background-color: #0056b3;
   }
+`;
+
+// 카메라 추가 버튼에만 margin-left 적용
+const AddButton = styled(Button)`
+  margin-left: 45%;
 `;
 
 const Modal = styled.div`

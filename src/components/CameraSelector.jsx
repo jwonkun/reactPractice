@@ -24,6 +24,13 @@ const CameraList = styled.div`
   display: flex;
   flex-direction: column;
   padding: 10px;
+
+  @media (max-width: 768px) {
+    display: flex;
+    flex-direction: row;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
 `;
 
 const CameraItem = styled.div`
@@ -35,5 +42,11 @@ const CameraItem = styled.div`
 
   &:hover {
     background-color: #7e7e7ecf;
+  }
+
+  @media (max-width: 768px) {
+    display: inline-block;
+    margin-right: 10px;
+    margin-bottom: 0; /* Row 방향에서는 margin-bottom을 제거 */
   }
 `;

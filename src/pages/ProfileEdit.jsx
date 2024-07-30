@@ -151,8 +151,10 @@ function ProfileEdit() {
           </PhoneInputContainer>
           {errors.phoneNumber && <ErrorMessage>{errors.phoneNumber}</ErrorMessage>}
         </FormGroup>
-        <Button type="submit">수정하기</Button>
-        <BackButton type="button" onClick={handleGoBack}>뒤로 가기</BackButton>
+        <ButtonGroup>
+          <Button type="submit">수정하기</Button>
+          <BackButton type="button" onClick={handleGoBack}>뒤로 가기</BackButton>
+        </ButtonGroup>
       </form>
     </EditContainer>
   );
@@ -172,6 +174,14 @@ const EditContainer = styled.div`
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   background-color: #fff;
+
+  @media (max-width:768px){
+    width: 300px;
+    padding: 50px 20px;
+    margin-top: 20px;
+    border-style: none;
+    box-shadow: none;
+  }
 `;
 
 const FormGroup = styled.div`
@@ -236,4 +246,9 @@ const BackButton = styled(Button)`
   &:hover {
     background-color: #5a6268;
   }
+`;
+
+const ButtonGroup =styled.div`
+  display: flex;
+  justify-content: center;
 `;

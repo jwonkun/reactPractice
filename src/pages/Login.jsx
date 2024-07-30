@@ -56,6 +56,10 @@ const EntranceContainer = styled.div`
     align-items: center;
     justify-content: center;
     height: 100vh;
+
+    @media (max-width:768px){
+      flex-direction: column;
+    }
   `;
   
   const IntroducingContainer = styled.div`
@@ -64,6 +68,11 @@ const EntranceContainer = styled.div`
     text-align: left;
     margin-bottom: 20px;
     padding: 200px;
+
+    @media (max-width:768px){
+      padding: 0px;
+      font-size: 10px;
+    }
   `;
   
   const LoginContainer = styled.div`
@@ -74,6 +83,10 @@ const EntranceContainer = styled.div`
     padding: 50px 120px;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+
+    @media (max-width:768px){
+      padding: 20px 50px 30px;
+    }
   `;
 
   const Button = styled.button`

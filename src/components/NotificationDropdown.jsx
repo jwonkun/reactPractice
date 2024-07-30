@@ -62,8 +62,8 @@ export default NotificationDropdown;
 
 const NotificationMenu = styled.div`
   position: fixed;
-  top: 50px;
-  right: 70px;
+  top: 75px;
+  right: 20px;
   background-color: #fff;
   border: 1px solid #ddd;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -114,5 +114,8 @@ const NotificationMenu = styled.div`
     ul li {
       border-bottom-color: #444;
     }
+  }
+  @media (max-width:768px){
+    top: 115px;
   }
 `;
