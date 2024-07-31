@@ -6,10 +6,17 @@ import styled from 'styled-components';
 function Login() {
   const [id, setId] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
   const navigate = useNavigate();
 
   const handleLogin = () => {
-    navigate('/main');
+    const storedUser = JSON.parse(localStorage.getItem(`user_${id}`));
+    if (storedUser && storedUser.user_pw === password) {
+      sessionStorage.setItem('user_id', id);
+      navigate('/main');
+    } else {
+      setError('아이디 또는 비밀번호가 잘못되었습니다.');
+    }
   };
 
   const handleSignup = () => {
@@ -23,6 +30,7 @@ function Login() {
       </IntroducingContainer>
       <LoginContainer>
         <h2>로그인</h2>
+        {error && <ErrorMessage>{error}</ErrorMessage>}
         <div className="form-group">
           <label htmlFor="id" className='label'>아이디:</label>
           <input
@@ -51,46 +59,52 @@ function Login() {
 export default Login;
 
 const EntranceContainer = styled.div`
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    height: 100vh;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
 
-    @media (max-width:768px){
-      flex-direction: column;
-    }
-  `;
-  
-  const IntroducingContainer = styled.div`
-    display: flex;
-    justify-content: left;
-    text-align: left;
-    margin-bottom: 20px;
-    padding: 200px;
-
-    @media (max-width:768px){
-      padding: 0px;
-      font-size: 10px;
-    }
-  `;
-  
-  const LoginContainer = styled.div`
-    display: flex;
+  @media (max-width:768px){
     flex-direction: column;
-    align-items: center;
-    border: 1px solid #ccc;
-    padding: 50px 120px;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+`;
 
-    @media (max-width:768px){
-      padding: 20px 50px 30px;
-    }
-  `;
+const IntroducingContainer = styled.div`
+  display: flex;
+  justify-content: left;
+  text-align: left;
+  margin-bottom: 20px;
+  padding: 200px;
 
-  const Button = styled.button`
-    width: 100%;
-    font-size: 15px;
-    font-weight: bold;
-  `
+  @media (max-width:768px){
+    padding: 0px;
+    font-size: 10px;
+  }
+`;
+
+const LoginContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border: 1px solid #ccc;
+  padding: 50px 120px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+
+  @media (max-width:768px){
+    padding: 20px 50px 30px;
+  }
+`;
+
+const Button = styled.button`
+  width: 100%;
+  font-size: 15px;
+  font-weight: bold;
+`;
+
+const ErrorMessage = styled.p`
+  color: red;
+  font-size: 14px;
+  margin-bottom: 10px;
+`;

@@ -4,13 +4,11 @@ import Dropdown from './Dropdown';
 import NotificationDropdown from './NotificationDropdown';
 import styled from 'styled-components';
 
-function Header() {
+function Header({ username, onLogout, isDarkMode, toggleDarkMode }) {
   const location = useLocation();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);
-  const [isDarkMode, setIsDarkMode] = useState(false);
-  const [unreadNotifications, setUnreadNotifications] = useState(true); // 알림 여부를 위한 상태
-  const username = '사용자 이름';
+  const [unreadNotifications, setUnreadNotifications] = useState(true);
 
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
@@ -23,18 +21,13 @@ function Header() {
   const toggleNotification = () => {
     setIsNotificationOpen(!isNotificationOpen);
     if (!isNotificationOpen) {
-      setUnreadNotifications(false); // 알림 드롭다운을 열면 포인트 제거
+      setUnreadNotifications(false);
     }
   };
 
   const closeNotification = () => {
     setIsNotificationOpen(false);
-    setUnreadNotifications(false); // 알림 드롭다운이 닫힐 때 포인트 제거
-  };
-
-  const toggleDarkMode = () => {
-    setIsDarkMode(!isDarkMode);
-    document.body.classList.toggle('dark-mode', !isDarkMode);
+    setUnreadNotifications(false);
   };
 
   return (
@@ -68,6 +61,7 @@ function Header() {
           username={username}
           toggleDarkMode={toggleDarkMode}
           isDarkMode={isDarkMode}
+          onLogout={onLogout}
         />
       </Icons>
     </HeaderContainer>
@@ -87,7 +81,6 @@ const HeaderContainer = styled.header`
     background-color: #333;
     color: #e0e0e0;
   }
-
 `;
 
 const Logo = styled.img`

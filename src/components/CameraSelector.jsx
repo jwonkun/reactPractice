@@ -7,9 +7,9 @@ const CameraSelector = ({ cameras, onSelect, selectedCamera }) => {
     <CameraList>
       {cameras.map((camera) => (
         <CameraItem
-          key={camera.name}
+          key={camera.id} // ID를 key로 사용
           onClick={() => onSelect(camera)}
-          isSelected={selectedCamera && selectedCamera.name === camera.name}
+          isSelected={selectedCamera && selectedCamera.id === camera.id} // ID를 비교
         >
           {camera.name}
         </CameraItem>
@@ -23,9 +23,16 @@ export default CameraSelector;
 const CameraList = styled.div`
   display: flex;
   flex-direction: column;
-  padding: 10px;
+  padding: 0;
+  margin: 0;
+  list-style-type: none;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  max-height: 300px;
+  overflow-y: auto;
 
   @media (max-width: 768px) {
+    max-width: auto;
     display: flex;
     flex-direction: row;
     overflow-x: auto;
@@ -35,10 +42,13 @@ const CameraList = styled.div`
 
 const CameraItem = styled.div`
   padding: 10px;
-  margin-bottom: 5px;
   cursor: pointer;
   background-color: ${(props) => (props.isSelected ? '#7e7e7ecf' : 'transparent')};
-  border-radius: 4px;
+  border-bottom: 1px solid #ddd;
+
+  &:last-child {
+    border-bottom: none;
+  }
 
   &:hover {
     background-color: #7e7e7ecf;
@@ -47,6 +57,6 @@ const CameraItem = styled.div`
   @media (max-width: 768px) {
     display: inline-block;
     margin-right: 10px;
-    margin-bottom: 0; /* Row 방향에서는 margin-bottom을 제거 */
+    margin-bottom: 0;
   }
 `;

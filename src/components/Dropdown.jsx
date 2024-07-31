@@ -3,8 +3,19 @@ import ReactDOM from 'react-dom';
 import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
-const Dropdown = ({ isOpen, closeDropdown, username, toggleDarkMode, isDarkMode }) => {
+const Dropdown = ({ isOpen, closeDropdown, toggleDarkMode, isDarkMode }) => {
   const navigate = useNavigate();
+  const user_id = sessionStorage.getItem('user_id');
+  const [user_name, setUser_name] = React.useState('');
+
+  useEffect(() => {
+    if (user_id) {
+      const storedUser = JSON.parse(localStorage.getItem(`user_${user_id}`));
+      if (storedUser) {
+        setUser_name(storedUser.user_name);
+      }
+    }
+  }, [user_id]);
 
   useEffect(() => {
     if (isOpen) {
@@ -25,15 +36,15 @@ const Dropdown = ({ isOpen, closeDropdown, username, toggleDarkMode, isDarkMode 
   const handleLogout = () => {
     const confirmLogout = window.confirm('로그아웃 하시겠습니까?');
     if (confirmLogout) {
-      // 로그아웃 처리 로직을 여기에 추가 (예: 토큰 삭제, 세션 종료 등)
+      sessionStorage.removeItem('userId');
       navigate('/login');
     }
   };
 
   return ReactDOM.createPortal(
     <DropdownMenu className="dropdown-menu">
-      <p>{`${username}님 안녕하세요!`}</p>
-      <Link to="/profile-edit">회원정보수정</Link>
+      <p>{`${user_name ? user_name : '사용자'}님 안녕하세요!`}</p>
+      <Link to="/profile-edit">회원정보 수정</Link>
       <button className='button' onClick={toggleDarkMode}>
         {isDarkMode ? '🌙 다크 모드 해제' : '🌞 다크 모드 활성화'}
       </button>
@@ -45,7 +56,7 @@ const Dropdown = ({ isOpen, closeDropdown, username, toggleDarkMode, isDarkMode 
 
 export default Dropdown;
 
-const DropdownMenu =styled.div`
+const DropdownMenu = styled.div`
   position: fixed;
   top: 75px;
   right: 20px;
@@ -61,9 +72,32 @@ const DropdownMenu =styled.div`
   p {
     font-weight: bold;
     font-size: 20px;
+    margin: 0;
   }
 
-  @media (max-width:768px){
-    top: 115px
+  a {
+    text-decoration: none;
+    color: #007bff;
+    font-size: 16px;
+  }
+
+  button {
+    background: none;
+    border: 1px solid #007bff;
+    color: #007bff;
+    padding: 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background 0.3s, color 0.3s;
+
+    &:hover {
+      background: #007bff;
+      color: #fff;
+    }
+  }
+
+  @media (max-width: 768px) {
+    top: 115px;
   }
 `;

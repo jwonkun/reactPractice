@@ -1,148 +1,179 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
+import CameraForm from '../components/CameraForm'; 
+import FarmForm from '../components/FarmForm'; 
 
 function CameraManagement() {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isFarmModalOpen, setIsFarmModalOpen] = useState(false);
+  const [isCameraModalOpen, setIsCameraModalOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [editIndex, setEditIndex] = useState(null);
-  const [cameras, setCameras] = useState([
-    { name: 'Cam1', id: '001', location: 'Front Door' },
-    { name: 'Cam2', id: '002', location: 'Back Yard' },
-    { name: 'Cam3', id: '003', location: 'Living Room' },
-    { name: 'Cam4', id: '004', location: 'Garage' }
-  ]);
+  const [farms, setFarms] = useState([]);
+  const [selectedFarm, setSelectedFarm] = useState(null);
+  const [cameras, setCameras] = useState({});
 
-  const openModal = () => {
-    setIsModalOpen(true);
+  useEffect(() => {
+    const user_id = sessionStorage.getItem('user_id');
+    if (user_id) {
+      loadFarms(user_id);
+      loadCameras(user_id);
+    } else {
+      // 사용자 ID가 없으면 로그인 페이지로 리디렉션
+      window.location.href = '/login';
+    }
+  }, []);
+
+  const loadFarms = (user_id) => {
+    const storedFarms = JSON.parse(localStorage.getItem(`user_${user_id}_farms`)) || [];
+    setFarms(storedFarms);
   };
 
-  const closeModal = () => {
-    setIsModalOpen(false);
+  const loadCameras = (user_id) => {
+    const storedCameras = JSON.parse(localStorage.getItem(`user_${user_id}_cameras`)) || {};
+    setCameras(storedCameras);
+  };
+
+  const openFarmModal = () => setIsFarmModalOpen(true);
+  const closeFarmModal = () => setIsFarmModalOpen(false);
+
+  const openCameraModal = (farmId) => {
+    setSelectedFarm(farmId);
+    setIsCameraModalOpen(true);
+  };
+
+  const closeCameraModal = () => {
+    setIsCameraModalOpen(false);
     setIsEditing(false);
     setEditIndex(null);
   };
 
-  const addCamera = (camera) => {
-    if (isEditing && editIndex !== null) {
-      const updatedCameras = cameras.map((cam, index) =>
-        index === editIndex ? camera : cam
-      );
-      setCameras(updatedCameras);
-    } else {
-      setCameras([...cameras, camera]);
+  const addFarm = (farmName) => {
+    const user_id = sessionStorage.getItem('user_id');
+    if (user_id) {
+      const newFarm = { id: Date.now().toString(), name: farmName, user_id: `${user_id}` };
+      const updatedFarms = [...farms, newFarm];
+      localStorage.setItem(`user_${user_id}_farms`, JSON.stringify(updatedFarms));
+      setFarms(updatedFarms);
+      setCameras({ ...cameras, [newFarm.id]: [] });
+      closeFarmModal();
     }
-    closeModal();
+  };
+
+  const addCamera = (camera) => {
+    if (selectedFarm) {
+      const user_id = sessionStorage.getItem('user_id');
+      if (user_id) {
+        let updatedCameras = { ...cameras };
+        if (isEditing && editIndex !== null) {
+          updatedCameras[selectedFarm][editIndex] = camera;
+        } else {
+          updatedCameras[selectedFarm] = [...(updatedCameras[selectedFarm] || []), camera];
+        }
+        localStorage.setItem(`user_${user_id}_cameras`, JSON.stringify(updatedCameras));
+        setCameras(updatedCameras);
+      }
+      closeCameraModal();
+    }
   };
 
   const editCamera = (index) => {
     setEditIndex(index);
     setIsEditing(true);
-    setIsModalOpen(true);
+    setIsCameraModalOpen(true);
   };
 
   const deleteCamera = (index) => {
-    const confirmed = window.confirm('정말 이 카메라를 삭제하시겠습니까?');
+    if (selectedFarm) {
+      const confirmed = window.confirm('정말 이 카메라를 삭제하시겠습니까?');
+      if (confirmed) {
+        const user_id = sessionStorage.getItem('user_id');
+        if (user_id) {
+          const updatedCameras = cameras[selectedFarm].filter((_, i) => i !== index);
+          const updatedCamerasState = { ...cameras, [selectedFarm]: updatedCameras };
+          localStorage.setItem(`user_${user_id}_cameras`, JSON.stringify(updatedCamerasState));
+          setCameras(updatedCamerasState);
+        }
+      }
+    }
+  };
+
+  const deleteFarm = (farmId) => {
+    const confirmed = window.confirm('정말 이 농가를 삭제하시겠습니까?');
     if (confirmed) {
-      setCameras(cameras.filter((_, i) => i !== index));
+      const user_id = sessionStorage.getItem('user_id');
+      if (user_id) {
+        const updatedFarms = farms.filter(farm => farm.id !== farmId);
+        localStorage.setItem(`user_${user_id}_farms`, JSON.stringify(updatedFarms));
+        setFarms(updatedFarms);
+
+        // 관련된 카메라 데이터 삭제
+        const updatedCameras = { ...cameras };
+        delete updatedCameras[farmId];
+        localStorage.setItem(`user_${user_id}_cameras`, JSON.stringify(updatedCameras));
+        setCameras(updatedCameras);
+      }
     }
   };
 
   return (
     <CamManageContainer>
-      <AddButton className="addBtn" onClick={openModal}>카메라 추가</AddButton>
+      <AddButton onClick={openFarmModal}>농가 추가</AddButton>
 
-      {isModalOpen && (
+      {isFarmModalOpen && (
         <Modal>
           <ModalContent>
-            <h3>{isEditing ? '카메라 수정' : '카메라 추가'}</h3>
-            <CameraForm
-              addCamera={addCamera}
-              closeModal={closeModal}
-              initialData={isEditing ? cameras[editIndex] : null}
+            <h3>농가 추가</h3>
+            <FarmForm
+              addFarm={addFarm}
+              closeModal={closeFarmModal}
             />
           </ModalContent>
         </Modal>
       )}
 
-      <CameraTable>
-        <thead>
-          <tr>
-            <th>이름</th>
-            <th>ID</th>
-            <th>설치 위치</th>
-            <th>액션</th>
-          </tr>
-        </thead>
-        <tbody>
-          {cameras.map((camera, index) => (
-            <tr key={index}>
-              <td>{camera.name}</td>
-              <td>{camera.id}</td>
-              <td>{camera.location}</td>
-              <td>
-                <Button onClick={() => editCamera(index)}>수정</Button>
-                <Button onClick={() => deleteCamera(index)}>삭제</Button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </CameraTable>
+      {farms.map(farm => (
+        <FarmBox key={farm.id}>
+          <FarmHeader>{farm.name}</FarmHeader>
+          <Button onClick={() => openCameraModal(farm.id)}>카메라 추가</Button>
+          <DeleteButton onClick={() => deleteFarm(farm.id)}>농가 삭제</DeleteButton>
+          {isCameraModalOpen && selectedFarm === farm.id && (
+            <Modal>
+              <ModalContent>
+                <h3>{isEditing ? '카메라 수정' : '카메라 추가'}</h3>
+                <CameraForm
+                  addCamera={addCamera}
+                  closeModal={closeCameraModal}
+                  initialData={isEditing ? cameras[selectedFarm][editIndex] : null}
+                />
+              </ModalContent>
+            </Modal>
+          )}
+          <CameraTable>
+            <thead>
+              <tr>
+                <th>이름</th>
+                <th>ID</th>
+                <th>설치 위치</th>
+                <th>액션</th>
+              </tr>
+            </thead>
+            <tbody>
+              {cameras[farm.id]?.map((camera, index) => (
+                <tr key={index}>
+                  <td>{camera.name}</td>
+                  <td>{camera.id}</td>
+                  <td>{camera.location}</td>
+                  <td>
+                    <Button className='actionBtn' onClick={() => editCamera(index)}>수정</Button>
+                    <Button className='actionBtn' onClick={() => deleteCamera(index)}>삭제</Button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </CameraTable>
+        </FarmBox>
+      ))}
     </CamManageContainer>
-  );
-}
-
-function CameraForm({ addCamera, closeModal, initialData }) {
-  const [formData, setFormData] = useState({
-    name: initialData?.name || '',
-    id: initialData?.id || '',
-    location: initialData?.location || ''
-  });
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    addCamera(formData);
-  };
-
-  return (
-    <Form onSubmit={handleSubmit}>
-      <FormGroup>
-        <Label htmlFor="name">카메라 이름:</Label>
-        <Input
-          type="text"
-          id="name"
-          name="name"
-          value={formData.name}
-          onChange={handleChange}
-        />
-      </FormGroup>
-      <FormGroup>
-        <Label htmlFor="id">카메라 ID:</Label>
-        <Input
-          type="text"
-          id="id"
-          name="id"
-          value={formData.id}
-          onChange={handleChange}
-        />
-      </FormGroup>
-      <FormGroup>
-        <Label htmlFor="location">설치 위치:</Label>
-        <Input
-          type="text"
-          id="location"
-          name="location"
-          value={formData.location}
-          onChange={handleChange}
-        />
-      </FormGroup>
-      <Button type="submit">{initialData ? '수정' : '추가'}</Button>
-      <Button type="button" onClick={closeModal}>취소</Button>
-    </Form>
   );
 }
 
@@ -154,6 +185,10 @@ const CamManageContainer = styled.div`
   align-items: center;
   justify-content: start;
   height: 100vh;
+
+  @media (max-width:768px){
+    width: 100%;
+  }
 `;
 
 const Button = styled.button`
@@ -168,11 +203,22 @@ const Button = styled.button`
   &:hover {
     background-color: #0056b3;
   }
+
 `;
 
-// 카메라 추가 버튼에만 margin-left 적용
 const AddButton = styled(Button)`
   margin-left: 45%;
+
+  @media (max-width:768px){
+    margin-left: auto;
+  }
+`;
+
+const DeleteButton = styled(Button)`
+  background-color: #dc3545;
+  &:hover {
+    background-color: #c82333;
+  }
 `;
 
 const Modal = styled.div`
@@ -194,32 +240,26 @@ const ModalContent = styled.div`
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 `;
 
-const Form = styled.form`
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-`;
-
-const FormGroup = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-`;
-
-const Label = styled.label`
-  font-weight: bold;
-`;
-
-const Input = styled.input`
-  padding: 8px;
+const FarmBox = styled.div`
+  margin: 20px;
+  padding: 20px;
   border: 1px solid #ccc;
-  border-radius: 4px;
+  border-radius: 8px;
+  width: 100%;
+  max-width: 800px;
+
+  @media (max-width: 768px){
+    width: auto;
+  }
+`;
+
+const FarmHeader = styled.h2`
+  margin-top: 0;
 `;
 
 const CameraTable = styled.table`
   margin-top: 20px;
   width: 100%;
-  max-width: 800px;
   border-collapse: collapse;
 
   th, td {

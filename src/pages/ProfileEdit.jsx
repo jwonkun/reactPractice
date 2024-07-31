@@ -7,30 +7,36 @@ function ProfileEdit() {
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
-    id: 'currentUserId',
-    password: '',
-    confirmPassword: '',
-    name: '',
-    emailLocal: '',
-    emailDomain: 'gmail.com',
-    phoneNumber: ''
+    user_id: '',
+    user_pw: '',
+    user_confirmPw: '',
+    user_name: '',
+    user_emailLocal: '',
+    user_emailDomain: 'gmail.com',
+    user_phone: ''
   });
 
   const [errors, setErrors] = useState({});
 
   useEffect(() => {
-    // 실제 데이터로 대체될 부분
     const fetchData = async () => {
-      const userProfile = {
-        id: 'currentUserId',
-        name: 'Current User',
-        emailLocal: 'current.email',
-        emailDomain: 'gmail.com',
-        phoneNumber: '01012345678'
-      };
-      setFormData(userProfile);
+      const user_id = sessionStorage.getItem('user_id');
+      if (user_id) {
+        const userProfile = JSON.parse(localStorage.getItem(`user_${user_id}`));
+        if (userProfile) {
+          setFormData({
+            user_id: userProfile.user_id,
+            user_pw: '',
+            user_confirmPw: '',
+            user_name: userProfile.user_name,
+            user_emailLocal: userProfile.user_email.split('@')[0],
+            user_emailDomain: userProfile.user_email.split('@')[1],
+            user_phone: userProfile.user_phone
+          });
+        }
+      }
     };
-    
+
     fetchData();
   }, []);
 
@@ -41,11 +47,11 @@ function ProfileEdit() {
 
   const validateForm = () => {
     const newErrors = {};
-    if (formData.password && formData.password !== formData.confirmPassword) newErrors.confirmPassword = '비밀번호가 일치하지 않습니다.';
-    if (!formData.name) newErrors.name = '이름은 필수 항목입니다.';
-    if (!formData.emailLocal) newErrors.emailLocal = '이메일은 필수 항목입니다.';
-    if (!/\S+/.test(formData.emailLocal)) newErrors.emailLocal = '유효한 이메일 주소를 입력해 주세요.';
-    if (!/^\d{11}$/.test(formData.phoneNumber)) newErrors.phoneNumber = '전화번호는 11자리 숫자여야 합니다.';
+    if (formData.user_pw && formData.user_pw !== formData.user_confirmPw) newErrors.user_confirmPw = '비밀번호가 일치하지 않습니다.';
+    if (!formData.user_name) newErrors.user_name = '이름은 필수 항목입니다.';
+    if (!formData.user_emailLocal) newErrors.user_emailLocal = '이메일은 필수 항목입니다.';
+    if (!/\S+/.test(formData.user_emailLocal)) newErrors.user_emailLocal = '유효한 이메일 주소를 입력해 주세요.';
+    if (!/^\d{10,11}$/.test(formData.user_phone)) newErrors.user_phone = '전화번호는 10~11자리 숫자여야 합니다.';
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -53,13 +59,19 @@ function ProfileEdit() {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (validateForm()) {
-      const formDataToSubmit = {
-        ...formData,
-        email: `${formData.emailLocal}@${formData.emailDomain}`,
-        phone: `${formData.phoneCarrier}-${formData.phoneNumber}`,
-      };
-      console.log('수정된 회원정보:', formDataToSubmit);
-      // 실제 회원정보 수정 API 호출 부분
+      const user_id = sessionStorage.getItem('user_id');
+      if (user_id) {
+        const updatedUserProfile = {
+          user_id: formData.user_id,
+          user_pw: formData.user_pw || JSON.parse(localStorage.getItem(`user_${user_id}`)).user_pw,
+          user_name: formData.user_name,
+          user_email: `${formData.user_emailLocal}@${formData.user_emailDomain}`,
+          user_phone: formData.user_phone
+        };
+        localStorage.setItem(`user_${user_id}`, JSON.stringify(updatedUserProfile));
+        alert('회원정보가 수정되었습니다.');
+        navigate('/main'); // 성공 후 이동할 페이지
+      }
     }
   };
 
@@ -72,62 +84,62 @@ function ProfileEdit() {
       <h2>회원정보 수정</h2>
       <form onSubmit={handleSubmit}>
         <FormGroup>
-          <Label htmlFor="id">아이디:</Label>
+          <Label htmlFor="user_id">아이디:</Label>
           <Input
             type="text"
-            id="id"
-            name="id"
-            value={formData.id}
+            id="user_id"
+            name="user_id"
+            value={formData.user_id}
             readOnly
           />
         </FormGroup>
         <FormGroup>
-          <Label htmlFor="password">비밀번호:</Label>
+          <Label htmlFor="user_pw">비밀번호:</Label>
           <Input
             type="password"
-            id="password"
-            name="password"
-            value={formData.password}
+            id="user_pw"
+            name="user_pw"
+            value={formData.user_pw}
             onChange={handleChange}
           />
-          {errors.password && <ErrorMessage>{errors.password}</ErrorMessage>}
+          {errors.user_pw && <ErrorMessage>{errors.user_pw}</ErrorMessage>}
         </FormGroup>
         <FormGroup>
-          <Label htmlFor="confirmPassword">비밀번호 확인:</Label>
+          <Label htmlFor="user_confirmPw">비밀번호 확인:</Label>
           <Input
             type="password"
-            id="confirmPassword"
-            name="confirmPassword"
-            value={formData.confirmPassword}
+            id="user_confirmPw"
+            name="user_confirmPw"
+            value={formData.user_confirmPw}
             onChange={handleChange}
           />
-          {errors.confirmPassword && <ErrorMessage>{errors.confirmPassword}</ErrorMessage>}
+          {errors.user_confirmPw && <ErrorMessage>{errors.user_confirmPw}</ErrorMessage>}
         </FormGroup>
         <FormGroup>
-          <Label htmlFor="name">이름:</Label>
+          <Label htmlFor="user_name">이름:</Label>
           <Input
             type="text"
-            id="name"
-            name="name"
-            value={formData.name}
+            id="user_name"
+            name="user_name"
+            value={formData.user_name}
             onChange={handleChange}
           />
-          {errors.name && <ErrorMessage>{errors.name}</ErrorMessage>}
+          {errors.user_name && <ErrorMessage>{errors.user_name}</ErrorMessage>}
         </FormGroup>
         <FormGroup>
-          <Label htmlFor="emailLocal">이메일:</Label>
+          <Label htmlFor="user_emailLocal">이메일:</Label>
           <EmailInputContainer>
             <Input
               type="text"
-              id="emailLocal"
-              name="emailLocal"
-              value={formData.emailLocal}
+              id="user_emailLocal"
+              name="user_emailLocal"
+              value={formData.user_emailLocal}
               onChange={handleChange}
             />
             @
             <Select
-              name="emailDomain"
-              value={formData.emailDomain}
+              name="user_emailDomain"
+              value={formData.user_emailDomain}
               onChange={handleChange}
             >
               <option value="gmail.com">gmail.com</option>
@@ -136,20 +148,20 @@ function ProfileEdit() {
               <option value="yahoo.com">yahoo.com</option>
             </Select>
           </EmailInputContainer>
-          {errors.emailLocal && <ErrorMessage>{errors.emailLocal}</ErrorMessage>}
+          {errors.user_emailLocal && <ErrorMessage>{errors.user_emailLocal}</ErrorMessage>}
         </FormGroup>
         <FormGroup>
-          <Label htmlFor="phone">전화번호:</Label>
+          <Label htmlFor="user_phone">전화번호:</Label>
           <PhoneInputContainer>
             <Input
               type="text"
-              id="phoneNumber"
-              name="phoneNumber"
-              value={formData.phoneNumber}
+              id="user_phone"
+              name="user_phone"
+              value={formData.user_phone}
               onChange={handleChange}
             />
           </PhoneInputContainer>
-          {errors.phoneNumber && <ErrorMessage>{errors.phoneNumber}</ErrorMessage>}
+          {errors.user_phone && <ErrorMessage>{errors.user_phone}</ErrorMessage>}
         </FormGroup>
         <ButtonGroup>
           <Button type="submit">수정하기</Button>

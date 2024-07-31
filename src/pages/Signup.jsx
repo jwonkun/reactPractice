@@ -1,3 +1,4 @@
+// src/pages/Signup.js
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
@@ -8,6 +9,7 @@ function Signup() {
   const [formData, setFormData] = useState({
     user_id: '',
     user_pw: '',
+    user_confirmPw: '',
     user_name: '',
     user_emailLocal: '',
     user_emailDomain: 'gmail.com',
@@ -23,13 +25,21 @@ function Signup() {
 
   const validateForm = () => {
     const newErrors = {};
+
     if (!formData.user_id) newErrors.user_id = '아이디는 필수 항목입니다.';
+    else if (localStorage.getItem(`user_${formData.user_id}`)) newErrors.user_id = '이미 사용 중인 아이디입니다.';
+
     if (!formData.user_pw) newErrors.user_pw = '비밀번호는 필수 항목입니다.';
+    else if (formData.user_pw.length < 6) newErrors.user_pw = '비밀번호는 최소 6자 이상이어야 합니다.';
+
     if (formData.user_pw !== formData.user_confirmPw) newErrors.user_confirmPw = '비밀번호가 일치하지 않습니다.';
     if (!formData.user_name) newErrors.user_name = '이름은 필수 항목입니다.';
-    if (!formData.user_emailLocal) newErrors.user_emailLocal = '이메일 로컬 부분은 필수 항목입니다.';
-    if (!/^[\w-.]+$/.test(formData.user_emailLocal)) newErrors.user_emailLocal = '유효한 이메일 주소를 입력해 주세요.';
+
+    if (!formData.user_emailLocal) newErrors.user_emailLocal = '이메일은 필수 항목입니다.';
+    else if (!/^[\w.-]+$/.test(formData.user_emailLocal)) newErrors.user_emailLocal = '유효한 이메일 주소를 입력해 주세요.';
+
     if (!/^\d{10,11}$/.test(formData.user_phone)) newErrors.user_phone = '전화번호는 10~11자리 숫자여야 합니다.';
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -45,31 +55,8 @@ function Signup() {
         user_phone: formData.user_phone,
       };
 
-      console.log(formDataToSubmit);
-
-      /*
-      fetch('http://172.30.1.85:9090/user/', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formDataToSubmit),
-        credentials: 'include'
-      })
-      .then(response => response.json())
-      .then(data => {
-        if (data.success) {
-          alert('회원가입 성공');
-          navigate('/login'); // 로그인 페이지로 이동
-        } else {
-          alert('회원가입 실패');
-        }
-      })
-      .catch(error => {
-        console.error('오류 발생:', error);
-        alert('회원가입 실패');
-      });
-      */
+      // formData를 localStorage에 저장
+      localStorage.setItem(`user_${formData.user_id}`, JSON.stringify(formDataToSubmit));
 
       alert('회원가입 성공');
       navigate('/login'); // 로그인 페이지로 이동
@@ -262,7 +249,7 @@ const BackButton = styled(Button)`
   }
 `;
 
-const ButtonGroup =styled.div`
+const ButtonGroup = styled.div`
   display: flex;
   justify-content: center;
 `;
