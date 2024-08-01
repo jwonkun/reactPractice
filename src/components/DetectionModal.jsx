@@ -8,13 +8,11 @@ const DetectionModal = ({ record, onClose }) => {
 
   const handleSave = () => {
     setIsSaved(true);
-    // 실제 저장 작업을 수행하는 로직 추가
   };
 
   const handleDelete = () => {
     if (window.confirm('정말로 이 기록을 삭제하시겠습니까?')) {
-      // 실제 삭제 작업을 수행하는 로직 추가
-      onClose(); // 모달 닫기
+      onClose(); 
     }
   };
 
@@ -32,6 +30,7 @@ const DetectionModal = ({ record, onClose }) => {
         <DetectedVideo
           src={`/videos/${record.videoName}.mp4`}
           title="Video"
+          controls
         />
         <Detail>
           <p><strong>제목:</strong> {record.videoName}</p>
@@ -87,15 +86,14 @@ const ModalOverlay = styled.div`
 const ModalContent = styled.div`
   background: #fff;
   border-radius: 8px;
-  padding: 10px; // 위아래 패딩을 줄였습니다.
+  padding: 10px; 
   width: 80%;
   max-width: 600px;
-  max-height: 80vh; // 모달의 최대 높이를 설정
-  overflow-y: auto; // 내용이 넘치면 스크롤바를 표시
+  max-height: 80vh; 
+  overflow-y: auto; 
   position: relative;
   color: #000;
 
-  // 다크 모드 스타일
   body.dark-mode & {
     background: #333;
     color: #e0e0e0;
@@ -112,7 +110,6 @@ const CloseButton = styled.button`
   cursor: pointer;
   color: #000;
 
-  // 다크 모드 스타일
   body.dark-mode & {
     color: #e0e0e0;
   }
@@ -124,11 +121,11 @@ const DetectedVideo = styled.video`
   
 `;
 const Detail = styled.div`
-  margin: 10px 0; // 위아래 여백을 줄였습니다.
+  margin: 10px 0; 
 `;
 
 const Decision = styled.div`
-  margin: 10px 0; // 위아래 여백을 줄였습니다.
+  margin: 10px 0; 
 `;
 
 const ButtonGroup = styled.div`
@@ -137,12 +134,12 @@ const ButtonGroup = styled.div`
 `;
 
 const DecisionButton = styled.button`
-  padding: 8px 16px; // 버튼의 패딩을 줄였습니다.
+  padding: 8px 16px; 
   border: 1px solid #ddd;
   border-radius: 4px;
   background-color: ${(props) => (props.active ? '#007bff' : '#fff')};
   color: ${(props) => (props.active ? '#fff' : '#007bff')};
-  font-size: 14px; // 버튼의 폰트 크기를 줄였습니다.
+  font-size: 14px; 
   cursor: pointer;
   transition: background-color 0.3s;
 
@@ -150,7 +147,6 @@ const DecisionButton = styled.button`
     background-color: ${(props) => (props.active ? '#0056b3' : '#f1f1f1')};
   }
 
-  // 다크 모드 스타일
   body.dark-mode & {
     border-color: #444;
     background-color: ${(props) => (props.active ? '#0056b3' : '#333')};
@@ -164,12 +160,12 @@ const Actions = styled.div`
 `;
 
 const ActionButton = styled.button`
-  padding: 8px 16px; // 버튼의 패딩을 줄였습니다.
+  padding: 8px 16px; 
   border: none;
   border-radius: 4px;
   background-color: #007bff;
   color: #fff;
-  font-size: 14px; // 버튼의 폰트 크기를 줄였습니다.
+  font-size: 14px; 
   cursor: pointer;
 
   &:disabled {
@@ -177,7 +173,6 @@ const ActionButton = styled.button`
     cursor: not-allowed;
   }
 
-  // 다크 모드 스타일
   body.dark-mode & {
     background-color: #0056b3;
   }

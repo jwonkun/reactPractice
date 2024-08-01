@@ -34,7 +34,7 @@ function Header({ username, onLogout, isDarkMode, toggleDarkMode }) {
     <HeaderContainer className={`header ${isDarkMode ? 'dark-mode' : ''}`}>
       <Nav>
         <Link to="/main">
-          <Logo src="/images/CattleBell_logo.png" alt="CattleBell Logo" />
+          <Logo src={isDarkMode ? "/images/CattleBell_logoDM.png" : "/images/CattleBell_logo.png"} alt="CattleBell Logo" />
         </Link>
         <NavLinks>
           <StyledLink to="/camera-management" active={location.pathname === '/camera-management'}>
@@ -47,14 +47,16 @@ function Header({ username, onLogout, isDarkMode, toggleDarkMode }) {
       </Nav>
       <Icons>
         <NotificationIconWrapper onClick={toggleNotification}>
-          🔔
+          <img src={isDarkMode ? '/images/notificationiconDM.png' : '/images/notificationicon.png'} alt="Notification Icon" />
           {unreadNotifications && <NotificationPoint />}
         </NotificationIconWrapper>
         <NotificationDropdown
           isOpen={isNotificationOpen}
           closeDropdown={closeNotification}
         />
-        <span className="icon" onClick={toggleDropdown}>👤</span>
+        <UserIcon onClick={toggleDropdown}>
+          <img src={isDarkMode ? '/images/usericonDM.png' : '/images/usericon.png'} alt="User Icon" />
+        </UserIcon>
         <Dropdown
           isOpen={isDropdownOpen}
           closeDropdown={closeDropdown}
@@ -111,7 +113,7 @@ const StyledLink = styled(Link)`
   text-decoration: none;
 
   &:hover {
-    color: ${(props) => (props.active ? '#000' : '#000')};
+    color: black;
   }
 
   @media (max-width: 768px) {
@@ -124,17 +126,24 @@ const Icons = styled.div`
   display: flex;
   gap: 15px;
   position: relative;
-
-  .icon {
-    font-size: 30px;
-    cursor: pointer;
-  }
+  top: 10px;
 `;
 
 const NotificationIconWrapper = styled.span`
   position: relative;
-  font-size: 30px;
   cursor: pointer;
+
+  img {
+    width: 40px;
+  }
+`;
+
+const UserIcon = styled.span`
+  cursor: pointer;
+
+  img {
+    width: 40px;
+  }
 `;
 
 const NotificationPoint = styled.span`

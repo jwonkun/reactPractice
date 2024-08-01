@@ -46,9 +46,9 @@ const Dropdown = ({ isOpen, closeDropdown, toggleDarkMode, isDarkMode }) => {
       <p>{`${user_name ? user_name : '사용자'}님 안녕하세요!`}</p>
       <Link to="/profile-edit">회원정보 수정</Link>
       <button className='button' onClick={toggleDarkMode}>
-        {isDarkMode ? '🌙 다크 모드 해제' : '🌞 다크 모드 활성화'}
+        {isDarkMode ? '다크 모드 해제' : '다크 모드 활성화'}
       </button>
-      <button className='button' onClick={handleLogout}>로그아웃</button>
+      <LogOutBtn onClick={handleLogout}>로그아웃</LogOutBtn>
     </DropdownMenu>,
     document.body
   );
@@ -98,6 +98,14 @@ const DropdownMenu = styled.div`
   }
 
   @media (max-width: 768px) {
-    top: 115px;
+    top: 120px;
   }
 `;
+
+const LogOutBtn = styled.button`
+  color: red;
+
+  &:hover{
+    background-color: red;
+  }
+`

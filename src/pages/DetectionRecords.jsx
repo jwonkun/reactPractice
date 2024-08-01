@@ -9,6 +9,7 @@ const sampleRecords = [
     videoName: 'MT20240729-01',
     detectionDateTime: '2024-07-29 14:30',
     detectionType: 'MT',
+    decision: '미확인',
     videoDuration: 120, // 2분
   },
   {
@@ -17,6 +18,7 @@ const sampleRecords = [
     videoName: 'MT20240729-02',
     detectionDateTime: '2024-07-29 15:00',
     detectionType: 'MT',
+    decision: '',
     videoDuration: 150, // 2분 30초
   },
   {
@@ -66,6 +68,7 @@ function DetectionRecords() {
               <DateTime>{record.detectionDateTime}</DateTime>
               <DetectionType>{record.detectionType}</DetectionType>
               <Duration>{formatDuration(record.videoDuration)}</Duration>
+              <Decision>{record.decision}</Decision>
             </Info>
           </RecordBox>
         ))}
@@ -117,6 +120,7 @@ const RecordBox = styled.div`
   &:hover {
     transform: scale(1.05);
     background-color: #f0f0f0;
+    color: black;
   }
 `;
 
@@ -158,3 +162,7 @@ const Duration = styled.p`
     color: #888;
   }
 `;
+const Decision = styled.p`
+  font-size: 16px;
+  font-weight: bold;
+`

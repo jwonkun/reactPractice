@@ -82,7 +82,7 @@ const NotificationMenu = styled.div`
 
   p {
     font-weight: bold;
-    font-size: 16px;
+    font-size: 14px;
     margin: 0;
   }
 
@@ -93,10 +93,15 @@ const NotificationMenu = styled.div`
 
     li {
       border-bottom: 1px solid #ddd;
+      border-radius: 8px;
       padding: 10px 0;
 
+      &:hover{
+        background-color: #e0e0e0;
+      }
+
       p {
-        margin: 5px 0;
+        margin: 5px 5px;
       }
     }
   }
@@ -116,6 +121,6 @@ const NotificationMenu = styled.div`
     }
   }
   @media (max-width:768px){
-    top: 115px;
+    top: 120px;
   }
 `;
