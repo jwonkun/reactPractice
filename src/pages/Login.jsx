@@ -26,6 +26,7 @@ function Login() {
   return (
     <EntranceContainer className="entrance-container">
       <IntroducingContainer className="introducing-container">
+        <Logo src="/images/CattleBell_logo.png" alt="" />
         <h1>어서오세요!</h1>
       </IntroducingContainer>
       <LoginContainer>
@@ -65,17 +66,17 @@ const EntranceContainer = styled.div`
   justify-content: center;
   height: 100vh;
 
-  @media (max-width:768px){
+  @media (max-aspect-ratio: 1/1){
     flex-direction: column;
   }
 `;
 
 const IntroducingContainer = styled.div`
   display: flex;
-  justify-content: left;
-  text-align: left;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
   margin-bottom: 20px;
-  padding: 200px;
 
   @media (max-width:768px){
     padding: 0px;
@@ -83,6 +84,13 @@ const IntroducingContainer = styled.div`
   }
 `;
 
+const Logo = styled.img`
+  width: 400px;
+
+  @media (max-width:768px){
+    width: 200px;
+  }
+`
 const LoginContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -92,7 +100,7 @@ const LoginContainer = styled.div`
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 
-  @media (max-width:768px){
+  @media (max-width:950px){
     padding: 20px 50px 30px;
   }
 `;

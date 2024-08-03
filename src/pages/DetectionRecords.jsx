@@ -8,7 +8,7 @@ const sampleRecords = [
     videoThumbnail: '/images/thumbnail1.jpg',
     videoName: 'MT20240729-01',
     detectionDateTime: '2024-07-29 14:30',
-    detectionType: 'MT',
+    detectionType: '승가',
     decision: '미확인',
     videoDuration: 120, // 2분
   },
@@ -17,8 +17,8 @@ const sampleRecords = [
     videoThumbnail: '/images/thumbnail2.jpg',
     videoName: 'MT20240729-02',
     detectionDateTime: '2024-07-29 15:00',
-    detectionType: 'MT',
-    decision: '',
+    detectionType: '승가',
+    decision: 'Y',
     videoDuration: 150, // 2분 30초
   },
   {
@@ -26,7 +26,8 @@ const sampleRecords = [
     videoThumbnail: '/images/thumbnail3.jpg',
     videoName: 'MT20240730-01',
     detectionDateTime: '2024-07-30 14:30',
-    detectionType: 'MT',
+    detectionType: '승가',
+    decision: 'Y',
     videoDuration: 95, // 1분 35초
   },
   {
@@ -34,7 +35,8 @@ const sampleRecords = [
     videoThumbnail: '/images/thumbnail4.jpg',
     videoName: 'MT20240730-02',
     detectionDateTime: '2024-07-30 15:00',
-    detectionType: 'MT',
+    detectionType: '승가',
+    decision: 'N',
     videoDuration: 180, // 3분
   },
   // 추가적인 탐지 기록을 여기에 추가

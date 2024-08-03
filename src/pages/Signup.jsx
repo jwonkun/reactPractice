@@ -231,13 +231,13 @@ const Button = styled.button`
   margin-right: 10px;
   border: none;
   border-radius: 4px;
-  background-color: #007bff;
+  background-color: black;
   color: white;
   font-size: 16px;
   cursor: pointer;
 
   &:hover {
-    background-color: #0056b3;
+    background-color: #404040;
   }
 `;
 
